@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import * as deepl from 'deepl-node';
 
-const authKey = ""; // Reemplaza con tu clave de autenticación
+const authKey = "8b850ce7-2318-41ed-b161-00314d79c1bf:fx"; // Reemplaza con tu clave de autenticación
 const translator = new deepl.Translator(authKey);
 
 export async function POST(req: NextRequest) {
