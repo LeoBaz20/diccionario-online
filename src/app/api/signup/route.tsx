@@ -1,33 +1,32 @@
 import prisma from "@/lib/prisma";
+import bcrypt from 'bcrypt';
+import { NextRequest, NextResponse } from 'next/server';
 
-export default async function handler(req, res) {
-  if (req.method === 'POST') {
-    const { name, lastname, email, password } = req.body;
+
+export async function POST(req: NextRequest) {
+  try {
+    const { name, lastname, email, password } = await req.json();
 
     if (!name || !lastname || !email || !password) {
-      return res.status(400).json({ error: 'Todos los campos son obligatorios' });
+      return NextResponse.json({ error: 'Todos los campos son obligatorios' }, { status: 400 });
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    try {
-      const newUser = await prisma.user.create({
-        data: {
-          name,
-          lastname,
-          email,
-          password: hashedPassword,
-        },
-      });
-      res.status(201).json(newUser);
-    } catch (error) {
-      if (error.code === 'P2002') {
-        res.status(400).json({ error: 'El email ya está registrado' });
-      } else {
-        res.status(500).json({ error: 'Error al crear el usuario' });
-      }
+    const newUser = await prisma.user.create({
+      data: {
+        name,
+        lastname,
+        email,
+        password: hashedPassword,
+      },
+    });
+
+    return NextResponse.json(newUser, { status: 201 });
+  } catch (error) {
+    if (error.code === 'P2002') {
+      return NextResponse.json({ error: 'El email ya está registrado' }, { status: 400 });
     }
-  } else {
-    res.status(405).json({ error: 'Método no permitido' });
+    return NextResponse.json({ error: 'Error al crear el usuario' }, { status: 500 });
   }
 }

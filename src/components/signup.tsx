@@ -32,7 +32,7 @@ export function Signup() {
     setFormValues((prevValues) => ({ ...prevValues, [name]: value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const newErrors = {
       name: formValues.name === '',
@@ -46,8 +46,26 @@ export function Signup() {
 
     const hasErrors = Object.values(newErrors).some((error) => error);
     if (!hasErrors) {
-      // Aquí puedes manejar el envío del formulario si no hay errores
-      console.log("Formulario enviado:", formValues);
+      try {
+        const response = await fetch('/api/signup', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(formValues),
+        });
+  
+        const data = await response.json();
+  
+        if (!response.ok) {
+          throw new Error(data.error || 'Error al registrar el usuario');
+        }
+  
+        console.log('Usuario registrado:', data);
+        // Aquí puedes redirigir al usuario o mostrar un mensaje de éxito
+      } catch (error) {
+        console.error('Error:', error);
+      }
     }
   };
 

@@ -26,7 +26,7 @@ function Hero() {
           variant="lead"
           className="mx-auto mt-8 mb-4 w-full px-8 !text-white lg:w-10/12 lg:px-12 xl:w-8/12 xl:px-20"
         >
-          Explora un diccionario multilingüe con traducciones precisas, definiciones claras y pronunciaciones nativas en más de 20 idiomas.
+          Explora un diccionario multilingüe con traducciones precisas, definiciones claras y pronunciaciones nativas.
         </Typography>
       </div>
     </header>
