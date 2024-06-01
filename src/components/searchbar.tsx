@@ -1,20 +1,19 @@
 "use client";
 
 import React, { useState } from "react";
-import axios from "axios";
-
+import { useRouter } from 'next/navigation';
 import { Navbar, Button, Input } from "../components/MaterialTailwind";
 import { MagnifyingGlassIcon } from '@heroicons/react/24/solid';
 
 export function SearchBar() {
   const [searchTerm, setSearchTerm] = useState("");
-
+  const router = useRouter();
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (searchTerm.trim() === "") return;
 
     // Redireccionar a la página de resultados con la palabra como parámetro de la URL
-    window.location.href = `/${searchTerm}`;
+    router.push(`/${searchTerm}`);
   };
 
   return (

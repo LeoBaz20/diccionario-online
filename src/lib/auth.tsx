@@ -1,7 +1,7 @@
 import { NextAuthOptions } from "next-auth";
 
 import CredentialsProvider from "next-auth/providers/credentials";
-import bcrypt from 'bcrypt';
+import {compare} from 'bcrypt';
 
 import prisma from "./prisma";
 
@@ -23,27 +23,39 @@ export const authConfig: NextAuthOptions = {
             return null;
   
            // Consultar el usuario en la base de datos con Prisma
-        const user = await prisma.user.findUnique({
+        const dbUser = await prisma.user.findUnique({
           where: { email: credentials.email },
         });
 
-        if (!user) {
-          return null;
+        if (!dbUser) {
+          return null; // El usuario no existe
         }
 
         // Comparar la contraseña ingresada con la almacenada en la base de datos
-        const isPasswordValid = await bcrypt.compare(credentials.password, user.password);
+        const isPasswordValid = await compare(
+          credentials.password,
+          dbUser.password
+        );
 
         if (!isPasswordValid) {
-          return null;
+          return null; // Contraseña incorrecta
         }
 
         // Excluir la contraseña del objeto de usuario retornado
-        const { password, ...userWithoutPassword } = user;
+        const { password, ...userWithoutPassword } = dbUser;
 
-        return userWithoutPassword as User;
+        console.log(userWithoutPassword);
+        return userWithoutPassword;
       },
     }),
     
   ],
+
+  session: {
+    jwt: true,
+  },
+
+  jwt: {
+    secret: "NEXTAUTH_SECRET",
+  },
   };

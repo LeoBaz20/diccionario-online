@@ -3,6 +3,7 @@ import {
   IconButton,
 } from "../components/MaterialTailwind";
 
+
 const CURRENT_YEAR = new Date().getFullYear();
 const LINKS = ["Empresa", "Sobre Nosotros", "Equipos"];
 

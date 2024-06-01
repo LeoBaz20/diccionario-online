@@ -2,6 +2,10 @@ import "./globals.css";
 import type { Metadata } from "next";
 import { Roboto } from "next/font/google";
 import { Layout } from "../components/Layout";
+import { Navbar } from "@/components";
+import { getServerSession } from "next-auth";
+import { authConfig } from "@/lib/auth";
+import { Providers } from "@/components/provider";
 
 const roboto = Roboto({
   subsets: ["latin"],
@@ -15,11 +19,12 @@ export const metadata: Metadata = {
     "Diccionario Multilingue",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const session = await getServerSession(authConfig);
   return (
     <html lang="en" >
       <head>
@@ -34,7 +39,10 @@ export default function RootLayout({
       </head>
       <body className={roboto.className} >
         <Layout>
-          {children}
+          <Providers>
+          <Navbar/>
+          <main>{children}</main>
+          </Providers>
         </Layout>
       </body>
     </html>

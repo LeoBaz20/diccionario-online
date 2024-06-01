@@ -1,6 +1,6 @@
-"use client";
-
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { useSession, signOut } from "next-auth/react";
+import Link from "next/link";
 import {
   Navbar as MTNavbar,
   Collapse,
@@ -33,45 +33,55 @@ interface NavItemProps {
   href?: string;
 }
 
-function NavItem({ children, href }: NavItemProps) {
+function NavItem({ children, href = "#" }: NavItemProps) {
   return (
     <li>
-      <Typography
-        as="a"
-        href={href || "#"}
-        variant="paragraph"
-        color="white"
-        className="flex items-center gap-2 font-medium text-white"
-      >
-        {children}
-      </Typography>
+      <Link href={href} passHref>
+        <Typography
+          variant="paragraph"
+          color="white"
+          className="flex items-center gap-2 font-medium text-white"
+        >
+          {children}
+        </Typography>
+      </Link>
     </li>
   );
 }
 
 export function Navbar() {
-  const [open, setOpen] = React.useState(false);
+  const { data: session } = useSession();
+  const [openMenu, setOpenMenu] = useState(false);
+  const [openUser, setOpenUser] = useState(false);
+  const [mounted, setMounted] = useState(false);
 
-  const handleOpen = () => setOpen((cur) => !cur);
+  const handleOpenMenu = () => setOpenMenu((cur) => !cur);
+  const handleOpenUser = () => setOpenUser((cur) => !cur);
 
-  React.useEffect(() => {
-    window.addEventListener(
-      "resize",
-      () => window.innerWidth >= 960 && setOpen(false)
-    );
+  useEffect(() => {
+    setMounted(true);
+    window.addEventListener("resize", () => {
+      if (window.innerWidth >= 960) {
+        setOpenMenu(false);
+        setOpenUser(false);
+      }
+    });
   }, []);
 
+  if (!mounted) return null; // Evitar el renderizado en el servidor
+
   return (
-    <MTNavbar shadow={false} fullWidth className=" border-0 bg-blue-900 sticky top-0 z-50">
+    <MTNavbar
+      shadow={false}
+      fullWidth
+      className="border-0 bg-blue-900 sticky top-0 z-50"
+    >
       <div className="container mx-auto flex items-center justify-between">
-        <Typography
-          as="a"
-          href="/"
-          color="white"
-          className="text-lg font-bold"
-        >
-          DiccionarioWEB
-        </Typography>
+        <Link href="/" passHref>
+          <Typography as="a" color="white" className="text-lg font-bold">
+            DiccionarioWEB
+          </Typography>
+        </Link>
         <ul className="ml-10 hidden items-center gap-8 lg:flex">
           {NAV_MENU.map(({ name, icon: Icon, href }) => (
             <NavItem key={name} href={href}>
@@ -80,28 +90,55 @@ export function Navbar() {
             </NavItem>
           ))}
         </ul>
-        <div className="hidden items-center gap-2 lg:flex">
-          <a href="/signin">
-          <Button variant="text" color="white">Iniciar Sesión</Button>
-          </a>
-          <a href="/signup">
-            <Button color="gray">Registrarse</Button>
-          </a>
-        </div>
-        <IconButton
-          variant="text"
-          color="white"
-          onClick={handleOpen}
-          className="ml-auto inline-block lg:hidden"
-        >
-          {open ? (
-            <XMarkIcon strokeWidth={2} className="h-6 w-6" />
-          ) : (
-            <Bars3Icon strokeWidth={2} className="h-6 w-6" />
+        {session ? (
+          <div className="hidden items-center gap-2 lg:flex">
+            <Typography
+              as="button"
+              onClick={handleOpenUser}
+              variant="paragraph"
+              color="white"
+              className="flex items-center gap-2 font-medium text-white"
+            >
+              {session.user.name}
+              <UserCircleIcon className="h-5 w-5" />
+            </Typography>
+          </div>
+        ) : (
+          <div className="hidden items-center gap-2 lg:flex">
+            <Link href="/signin">
+              <Button variant="text" color="white">
+                Iniciar Sesión
+              </Button>
+            </Link>
+            <Link href="/signup">
+              <Button color="gray">Registrarse</Button>
+            </Link>
+          </div>
+        )}
+        <div className="flex lg:hidden">
+          {session && (
+            <IconButton
+              variant="text"
+              color="white"
+              onClick={handleOpenUser}
+            >
+              <UserCircleIcon className="h-6 w-6" />
+            </IconButton>
           )}
-        </IconButton>
+          <IconButton
+            variant="text"
+            color="white"
+            onClick={handleOpenMenu}
+          >
+            {openMenu ? (
+              <XMarkIcon strokeWidth={2} className="h-6 w-6" />
+            ) : (
+              <Bars3Icon strokeWidth={2} className="h-6 w-6" />
+            )}
+          </IconButton>
+        </div>
       </div>
-      <Collapse open={open}>
+      <Collapse open={openMenu}>
         <div className="container mx-auto mt-3 border-t border-gray-200 px-2 pt-4">
           <ul className="flex flex-col gap-4">
             {NAV_MENU.map(({ name, icon: Icon, href }) => (
@@ -111,14 +148,25 @@ export function Navbar() {
               </NavItem>
             ))}
           </ul>
-          <div className="mt-6 mb-4 flex items-center gap-2">
-            <a href="/signin">
-            <Button variant="text" color="white">Iniciar Sesión</Button>
-            </a>
-            <a href="/signup">
-              <Button color="gray">Registrarse</Button>
-            </a>
-          </div>
+        </div>
+      </Collapse>
+      <Collapse open={openUser}>
+        <div className="container mx-auto mt-3 border-t border-gray-200 px-2 pt-4">
+          {session ? (
+            <ul className="flex flex-col gap-4">
+              <NavItem href="/profile">Perfil</NavItem>
+              <li>
+                <Button onClick={() => signOut()} variant="filled" color="red">
+                  Cerrar Sesión
+                </Button>
+              </li>
+            </ul>
+          ) : (
+            <ul className="flex flex-col gap-4">
+              <NavItem href="/signin">Iniciar Sesión</NavItem>
+              <NavItem href="/signup">Registrarse</NavItem>
+            </ul>
+          )}
         </div>
       </Collapse>
     </MTNavbar>

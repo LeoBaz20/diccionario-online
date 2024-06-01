@@ -31,8 +31,6 @@ const WordPageContainer = () => {
 
   if (loading) {
     return <div>
-      <Navbar/>
-      <SearchBar/>
     </div>;
   }
 
@@ -45,7 +43,6 @@ const WordPageContainer = () => {
       <Head>
         <title>{definition.word}</title>
       </Head>
-      <Navbar />
       <SearchBar />
       <WordPage definition={definition} />
       <Footer/>

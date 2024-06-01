@@ -1,8 +1,13 @@
+"use client";
+
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { Typography, Input, Button } from "../components/MaterialTailwind";
 import { EyeSlashIcon, EyeIcon } from "@heroicons/react/24/solid";
+import { signIn } from "next-auth/react";
 
 export function Signin() {
+  const router = useRouter();
   const [passwordShown, setPasswordShown] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -12,28 +17,23 @@ export function Signin() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError(""); // Reset error message
 
-    try {
-      const response = await fetch("/api/auth/signin", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email, password }),
-      });
+    const email = e.target.email.value;
+    const password = e.target.password.value;
 
-      const data = await response.json();
+    const signInResponse = await signIn("credentials",{
+      email,
+      password,
+      redirect: false,
+    });
 
-      if (!response.ok) {
-        throw new Error(data.error || "Error al iniciar sesión");
-      }
-
-      // Aquí puedes redirigir al usuario o mostrar un mensaje de éxito
-      console.log("Inicio de sesión exitoso:", data);
-    } catch (error) {
-      setError(error.message);
+    if (signInResponse && !signInResponse.error){
+      router.push("/");
+    }else{
+      console.log("Error: ", signInResponse.error);
+      setError("Tu correo o contraseña están incorrectos.");
     }
+
   };
 
   return (
@@ -85,6 +85,7 @@ export function Signin() {
               </Typography>
             </label>
             <Input
+              id="password"
               size="lg"
               placeholder="********"
               labelProps={{
@@ -110,8 +111,7 @@ export function Signin() {
               {error}
             </Typography>
           )}
-          <Button color="gray" size="lg" className="mt-6" fullWidth
-          onClick={handleSubmit}
+          <Button color="gray" size="lg" className="mt-6" fullWidth type="Submit"
           >
             Iniciar Sesión
           </Button>
@@ -126,19 +126,6 @@ export function Signin() {
               Olvide mi contraseña
             </Typography>
           </div>
-          <Button
-            variant="outlined"
-            size="lg"
-            className="mt-6 flex h-12 items-center justify-center gap-2"
-            fullWidth
-          >
-            <img
-              src={`https://www.material-tailwind.com/logos/logo-google.png`}
-              alt="google"
-              className="h-6 w-6"
-            />{" "}
-            sign in with google
-          </Button>
           <Typography
             variant="small"
             color="gray"

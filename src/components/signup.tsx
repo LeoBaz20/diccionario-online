@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { toast, ToastContainer } from 'react-toastify';
+import { useRouter } from "next/navigation";
 import {
   Typography,
   Input,
@@ -7,6 +9,7 @@ import {
 import { EyeSlashIcon, EyeIcon } from "@heroicons/react/24/solid";
 
 export function Signup() {
+  const router = useRouter();
   const [passwordShown, setPasswordShown] = useState(false);
   const togglePasswordVisibility = () => setPasswordShown((cur) => !cur);
 
@@ -60,12 +63,18 @@ export function Signup() {
         if (!response.ok) {
           throw new Error(data.error || 'Error al registrar el usuario');
         }
-  
+        
         console.log('Usuario registrado:', data);
-        // Aquí puedes redirigir al usuario o mostrar un mensaje de éxito
+        toast.success("Usuario registrado correctamente");
+        setTimeout(()=>{
+          router.push("/signin");
+        }, 2000);
       } catch (error) {
         console.error('Error:', error);
+        toast.error(error.message || 'Error al registrar el usuario');
       }
+    } else {
+      toast.error('Por favor, complete todos los campos correctamente.');
     }
   };
 
