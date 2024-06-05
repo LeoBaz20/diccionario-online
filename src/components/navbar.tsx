@@ -25,6 +25,7 @@ const NAV_MENU = [
   {
     name: "Favoritos",
     icon: StarIcon,
+    href: "/favs"
   },
 ];
 

@@ -3,8 +3,6 @@ import type { Metadata } from "next";
 import { Roboto } from "next/font/google";
 import { Layout } from "../components/Layout";
 import { Navbar } from "@/components";
-import { getServerSession } from "next-auth";
-import { authConfig } from "@/lib/auth";
 import { Providers } from "@/components/provider";
 
 const roboto = Roboto({
@@ -24,7 +22,6 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const session = await getServerSession(authConfig);
   return (
     <html lang="en" >
       <head>
