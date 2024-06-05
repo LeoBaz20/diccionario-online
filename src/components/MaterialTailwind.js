@@ -14,7 +14,11 @@ import {
     Textarea,
     CardBody,
     Select,
-    Option
+    Option,
+    Menu,
+    MenuHandler,
+    MenuList,
+    MenuItem,
   } from "@material-tailwind/react";
   
   export {
@@ -31,5 +35,9 @@ import {
     Textarea,
     CardBody,
     Select,
-    Option
+    Option,
+    Menu,
+    MenuHandler,
+    MenuList,
+    MenuItem,
   } 

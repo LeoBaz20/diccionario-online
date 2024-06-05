@@ -1,16 +1,47 @@
 "use client";
 
-import React from 'react';
+import React, { useState } from 'react';
+
+import {
+  IconButton,
+  Button,
+  Menu,
+  MenuHandler,
+  MenuList,
+  MenuItem,
+} from "../components/MaterialTailwind";
 
 export const WordPage = ({ definition }) => {
   const meanings = definition.meanings || [];
   const phonetics = definition.phonetics || [];
 
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  // Función para manejar el clic en el IconButton
+  const handleIconButtonClick = () => {
+    setIsMenuOpen(!isMenuOpen); // Alternar la visibilidad del menú desplegable
+  };
+
+
   return (
     <div className="min-h-screen bg-white text-black p-16">
       <div className="max-w-4xl mx-auto">
-        <header className="text-left mb-12">
+        <header className="text-left mb-12 flex items-center">
           <h1 className="text-6xl font-bold">{definition.word}</h1>
+          <div className="ml-4">
+            <Menu>
+              <MenuHandler>
+              <IconButton color="black" variant='outlined' size="lg" onClick={handleIconButtonClick}>
+              <i className="fas fa-star" />
+            </IconButton>
+              </MenuHandler>
+              <MenuList>
+                <MenuItem>Crear nueva lista</MenuItem>
+                <hr className="my-3" />
+                <MenuItem>Favoritos</MenuItem>
+              </MenuList>
+            </Menu>
+          </div>
         </header>
         <main className="grid grid-cols-3 gap-8">
           <section className="col-span-2">
