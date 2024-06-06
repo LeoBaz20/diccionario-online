@@ -8,3 +8,4 @@ export * from "./translateUI";
 export * from "./WordPage";
 export * from "./searchbar";
 export * from "./listCard";
+export * from "./ListasUI";
