@@ -22,7 +22,8 @@ import {
     MenuList,
     MenuItem,
     Alert,
-    Avatar
+    Avatar,
+    Dialog
   } from "@material-tailwind/react";
   
   export {
@@ -47,5 +48,6 @@ import {
     MenuList,
     MenuItem,
     Alert,
-    Avatar
+    Avatar,
+    Dialog
   } 

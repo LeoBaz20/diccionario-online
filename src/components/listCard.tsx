@@ -10,7 +10,7 @@ const ListCard = ({ title, wordCount, color }) => {
           {title}
         </Typography>
         <Typography className='bottom-2'>
-          {wordCount} {wordCount > 1 ? 'words' : 'word'}
+          {wordCount} {wordCount > 1 ? 'palabras' : 'palabra'}
         </Typography>
       </CardBody>
       <div className="absolute bottom-2 right-2">

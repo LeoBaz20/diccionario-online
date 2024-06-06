@@ -1,7 +1,7 @@
 "use client";
 
 import ListUI from '@/components/ListUI'
-import { Footer } from '@/components';
+import { Footer, SearchBar } from '@/components';
 
 export default function Home() {
   const lists = [
@@ -12,6 +12,7 @@ export default function Home() {
 
   return (
     <>
+    <SearchBar/>
     <ListUI lists={lists}/>
     <Footer/>
     </>

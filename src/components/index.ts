@@ -9,3 +9,4 @@ export * from "./WordPage";
 export * from "./searchbar";
 export * from "./listCard";
 export * from "./ListUI";
+export * from "./NewList";
