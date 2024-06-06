@@ -1,7 +1,7 @@
 import ListCard from '@/components/listCard';
-import { Button } from '../components/MaterialTailwind';
+import { Button } from './MaterialTailwind';
 
-const ListasUI = ({ lists }) => {
+const ListUI = ({ lists }) => {
 
   return (
     <div className="min-h-screen bg-gray-100 p-10">
@@ -20,4 +20,4 @@ const ListasUI = ({ lists }) => {
   );
 }
 
-export default ListasUI;
+export default ListUI;
