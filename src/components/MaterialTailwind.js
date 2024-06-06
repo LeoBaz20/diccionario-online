@@ -10,6 +10,8 @@ import {
     ThemeProvider,
     Input,
     Card,
+    CardHeader,
+    CardFooter,
     Checkbox,
     Textarea,
     CardBody,
@@ -19,6 +21,8 @@ import {
     MenuHandler,
     MenuList,
     MenuItem,
+    Alert,
+    Avatar
   } from "@material-tailwind/react";
   
   export {
@@ -31,6 +35,8 @@ import {
     ThemeProvider,
     Input,
     Card,
+    CardHeader,
+    CardFooter,
     Checkbox,
     Textarea,
     CardBody,
@@ -40,4 +46,6 @@ import {
     MenuHandler,
     MenuList,
     MenuItem,
+    Alert,
+    Avatar
   } 

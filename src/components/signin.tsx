@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Typography, Input, Button } from "../components/MaterialTailwind";
+import { Typography, Input, Button, Alert } from "../components/MaterialTailwind";
 import { EyeSlashIcon, EyeIcon } from "@heroicons/react/24/solid";
 import { signIn } from "next-auth/react";
 
@@ -107,9 +107,9 @@ export function Signin() {
             />
           </div>
           {error && (
-            <Typography variant="small" color="red" className="mb-4 text-center">
+            <Alert color="red">
               {error}
-            </Typography>
+            </Alert>
           )}
           <Button color="gray" size="lg" className="mt-6" fullWidth type="Submit"
           >

@@ -4,7 +4,8 @@ import { useRouter } from "next/navigation";
 import {
   Typography,
   Input,
-  Button
+  Button,
+  Alert
 } from "../components/MaterialTailwind";
 import { EyeSlashIcon, EyeIcon } from "@heroicons/react/24/solid";
 
@@ -85,6 +86,7 @@ export function Signup() {
       }}
     >
       <div className="bg-white rounded-lg p-10 mx-auto max-w-[24rem]">
+
         <Typography variant="h3" color="blue-gray" className="mb-2">
           Registro
         </Typography>
