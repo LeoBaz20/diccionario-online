@@ -50,13 +50,13 @@ export const authConfig: NextAuthOptions = {
     }),
     
   ],
-
+  secret: process.env.NEXTAUTH_SECRET,
   session: {
     jwt: true,
   },
 
   jwt: {
-    secret: "NEXTAUTH_SECRET",
+    secret: process.env.NEXTAUTH_SECRET,
   },
   callbacks: {
     async jwt({ token, user }) {
