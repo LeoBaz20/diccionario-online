@@ -4,12 +4,14 @@ import { useSession } from 'next-auth/react';
 import ListCard from '@/components/Lists/ListCard';
 import NewList from "./NewList";
 import { Button, Dialog } from '../MaterialTailwind';
+import { useRouter } from "next/navigation";
 
 export function ListUI(){
   const { data: session } = useSession();
   const [userLists, setUserLists] = useState([]);
-
   const [open, setOpen] = React.useState(false);
+  const router = useRouter();
+
   const handleOpen = () => setOpen((cur) => !cur);
 
   useEffect(() => {
@@ -20,7 +22,6 @@ export function ListUI(){
           if (response.ok) {
             const data = await response.json();
             setUserLists(data);
-            console.log(userLists);
           } else {
             console.error('Error fetching lists:', response.statusText);
           }
@@ -33,11 +34,15 @@ export function ListUI(){
     fetchUserLists();
   }, [session]);
 
+  const handleListClick = (id) => {
+    router.push(`/Lists/${id}`);
+  };
+
   return (
-    <div className="min-h-screen bg-gray-100 p-10">
+    <div className="min-h-screen bg-white p-10">
       <main className="max-w-2xl mx-auto">
         <div className="flex justify-between items-center mb-8">
-          <h1 className="text-4xl font-bold">Mis Listas</h1>
+          <h1 className="text-3xl font-bold">MIS LISTAS</h1>
           <Button color="black" onClick={handleOpen}>Nueva Lista</Button>
           <Dialog
                   size="xs"
@@ -50,7 +55,7 @@ export function ListUI(){
         </div>
         <div className="space-y-4">
           {userLists.map((list, index) => (
-            <ListCard key={index} {...list} />
+            <ListCard key={index} {...list} onClick={handleListClick} />
           ))}
         </div>
       </main>

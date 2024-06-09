@@ -14,7 +14,7 @@ export async function POST(req: NextRequest) {
   const userId = session.user.id;
 
   if (!name || !userId) {
-    return NextResponse.json({ error: 'Name and userId are required' }, { status: 400 });
+    return NextResponse.json({ error: 'Nombre y UserID es necesario' }, { status: 400 });
   }
 
   try {

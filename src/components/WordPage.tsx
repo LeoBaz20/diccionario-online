@@ -1,25 +1,27 @@
-"use client";
-
 import React, { useState } from 'react';
-
 import {
   IconButton,
-  Button,
-  Menu,
-  MenuHandler,
-  MenuList,
-  MenuItem,
+  Dialog,
 } from "../components/MaterialTailwind";
+
+import { useRouter } from 'next/navigation';
+import { useSession } from 'next-auth/react';
+import { AddWord } from './AddWord';
 
 export const WordPage = ({ definition }) => {
   const meanings = definition.meanings || [];
   const phonetics = definition.phonetics || [];
+  const { data: session } = useSession();
 
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [open, setOpen] = useState(false);
+  const router = useRouter();
 
-  // Función para manejar el clic en el IconButton
-  const handleIconButtonClick = () => {
-    setIsMenuOpen(!isMenuOpen); // Alternar la visibilidad del menú desplegable
+  const handleOpen = () => {
+    if (!session) {
+      router.push('/signin'); // Redirigir al inicio de sesión si no está autenticado
+    } else {
+      setOpen((cur) => !cur); // Abrir el diálogo si está autenticado
+    }
   };
 
 
@@ -29,18 +31,17 @@ export const WordPage = ({ definition }) => {
         <header className="text-left mb-12 flex items-center">
           <h1 className="text-6xl font-bold">{definition.word}</h1>
           <div className="ml-4">
-            <Menu>
-              <MenuHandler>
-              <IconButton color="black" variant='outlined' size="lg" onClick={handleIconButtonClick}>
-              <i className="fas fa-star" />
-            </IconButton>
-              </MenuHandler>
-              <MenuList>
-                <MenuItem>Crear nueva lista</MenuItem>
-                <hr className="my-3" />
-                <MenuItem>Favoritos</MenuItem>
-              </MenuList>
-            </Menu>
+          <IconButton onClick={handleOpen} color="black" variant="outlined" size="lg">
+          <i className="fas fa-star" />
+        </IconButton>
+        <Dialog
+                  size="xs"
+                  open={open}
+                  handler={handleOpen}
+                  className="bg-transparent shadow-none"
+          >
+          <AddWord word={definition.word} onClose={handleOpen}/>
+          </Dialog>
           </div>
         </header>
         <main className="grid grid-cols-3 gap-8">

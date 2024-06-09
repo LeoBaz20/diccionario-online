@@ -5,7 +5,9 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import axios from 'axios';
 import Head from 'next/head';
-import { Navbar, SearchBar, WordPage, Footer} from "../../components";
+import { SearchBar, WordPage, Footer } from "../../components";
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const WordPageContainer = () => {
   const { word } = useParams(); // Reemplazar useRouter con useParams
@@ -40,12 +42,13 @@ const WordPageContainer = () => {
 
   return (
     <div>
+      <ToastContainer />
       <Head>
         <title>{definition.word}</title>
       </Head>
       <SearchBar />
       <WordPage definition={definition} />
-      <Footer/>
+      <Footer />
     </div>
   );
 }

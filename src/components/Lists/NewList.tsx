@@ -1,5 +1,6 @@
 import React from "react";
 import { useState } from 'react';
+import { toast } from 'react-toastify';
 import { useSession } from 'next-auth/react';
 import {
   Button,
@@ -34,12 +35,14 @@ export function NewList({handleClose}) {
 
     const data = await response.json();
     if (response.ok) {
-      alert('List created successfully');
+      toast.success('Lista creada correctamente');
       setName('');
       handleClose();
-      window.location.reload();
+      setTimeout(()=>{
+        window.location.reload();
+      }, 2000);
     } else {
-      alert('Error creating list: ' + data.error);
+      toast.error('Error creando la lista: ' + data.error);
     }
   };
 

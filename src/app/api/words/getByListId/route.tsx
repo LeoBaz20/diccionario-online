@@ -3,28 +3,28 @@ import { getServerSession } from 'next-auth/next';
 import prisma from '@/lib/prisma';
 import { authConfig } from '@/lib/auth';
 
-export async function PUT(req: NextRequest) {
+export async function GET(req: NextRequest) {
   const session = await getServerSession(authConfig);
 
   if (!session) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
-  const { id, name } = await req.json();
+  const { searchParams } = new URL(req.url);
+  const listId = searchParams.get('id');
 
-  if (!id || !name) {
-    return NextResponse.json({ error: 'ID y Nombre es obligatorio' }, { status: 400 });
+  if (!listId) {
+    return NextResponse.json({ error: 'ID is required' }, { status: 400 });
   }
 
   try {
-    const updatedList = await prisma.list.update({
-      where: { id },
-      data: { name },
+    const words = await prisma.word.findMany({
+      where: { listId: parseInt(listId) },
     });
 
-    return NextResponse.json(updatedList, { status: 200 });
+    return NextResponse.json(words, { status: 200 });
   } catch (error) {
-    console.error(error);
+    console.error('Error fetching words:', error);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }

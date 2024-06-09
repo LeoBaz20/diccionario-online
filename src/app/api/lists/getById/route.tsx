@@ -10,12 +10,16 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
-  const userId = session.user.id;
+  const { searchParams } = new URL(req.url);
+  const listId = searchParams.get('id');
+
+  if (!listId) {
+    return NextResponse.json({ error: 'ID is required' }, { status: 400 });
+  }
 
   try {
-    // Consulta la base de datos para obtener las listas y el conteo de palabras en cada lista
-    const lists = await prisma.list.findMany({
-      where: { userId },
+    const list = await prisma.list.findUnique({
+      where: { id: parseInt(listId) },
       include: {
         _count: {
           select: {
@@ -25,14 +29,18 @@ export async function GET(req: NextRequest) {
       },
     });
 
-    const formattedLists = lists.map(list => ({
+    if (!list) {
+      return NextResponse.json({ error: 'List not found' }, { status: 404 });
+    }
+
+    const formattedList = {
       ...list,
       wordCount: list._count.words,
-    }));
+    };
 
-    return NextResponse.json(formattedLists, { status: 200 });
+    return NextResponse.json(formattedList, { status: 200 });
   } catch (error) {
-    console.error(error);
+    console.error('Error fetching list:', error);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }

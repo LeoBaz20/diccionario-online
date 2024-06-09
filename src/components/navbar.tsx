@@ -23,9 +23,9 @@ const NAV_MENU = [
     href: "/translatePage",
   },
   {
-    name: "Favoritos",
+    name: "Listas",
     icon: StarIcon,
-    href: "/favs"
+    href: "/Lists"
   },
 ];
 

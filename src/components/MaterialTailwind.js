@@ -23,7 +23,11 @@ import {
     MenuItem,
     Alert,
     Avatar,
-    Dialog
+    Dialog,
+    DialogHeader,
+    DialogBody,
+    DialogFooter,
+    Breadcrumbs,
   } from "@material-tailwind/react";
   
   export {
@@ -49,5 +53,9 @@ import {
     MenuItem,
     Alert,
     Avatar,
-    Dialog
+    Dialog,
+    DialogHeader,
+    DialogBody,
+    DialogFooter,
+    Breadcrumbs
   } 

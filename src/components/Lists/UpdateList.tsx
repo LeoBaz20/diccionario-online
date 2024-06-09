@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from 'react';
+import { toast } from 'react-toastify';
 import { useSession } from 'next-auth/react';
 import {
   Button,
@@ -11,9 +12,13 @@ import {
   Input,
 } from "../MaterialTailwind";
  
-export function UpdateList({listId,handleClose}) {
+export function UpdateList({listId, listName,handleClose}) {
   const [name, setName] = useState('');
   const { data: session } = useSession();
+
+  useEffect(() => {
+    setName(listName);
+  }, [listName]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -33,11 +38,13 @@ export function UpdateList({listId,handleClose}) {
 
     const data = await response.json();
     if (response.ok) {
-      alert('List updated successfully');
-      setName('');
+      toast.success('Lista actualizada correctamente');
       handleClose();
+      setTimeout(()=>{
+        window.location.reload();
+      }, 2000);
     } else {
-      alert('Error updating list: ' + data.error);
+      toast.error('Error actualizando la lista: ' + data.error);
     }
   };
 

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { toast, ToastContainer } from 'react-toastify';
+import { toast } from 'react-toastify';
 import { useRouter } from "next/navigation";
 import {
   Typography,
@@ -64,8 +64,6 @@ export function Signup() {
         if (!response.ok) {
           throw new Error(data.error || 'Error al registrar el usuario');
         }
-        
-        console.log('Usuario registrado:', data);
         toast.success("Usuario registrado correctamente");
         setTimeout(()=>{
           router.push("/signin");

@@ -3,26 +3,25 @@ import { getServerSession } from 'next-auth/next';
 import prisma from '@/lib/prisma';
 import { authConfig } from '@/lib/auth';
 
-export async function PUT(req: NextRequest) {
+export async function DELETE(req: NextRequest) {
   const session = await getServerSession(authConfig);
 
   if (!session) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
-  const { id, name } = await req.json();
+  const { id } = await req.json();
 
-  if (!id || !name) {
-    return NextResponse.json({ error: 'ID y Nombre es obligatorio' }, { status: 400 });
+  if (!id) {
+    return NextResponse.json({ error: 'ID es requerido' }, { status: 400 });
   }
 
   try {
-    const updatedList = await prisma.list.update({
+    await prisma.list.delete({
       where: { id },
-      data: { name },
     });
 
-    return NextResponse.json(updatedList, { status: 200 });
+    return NextResponse.json({ message: 'Lista eliminada correctamente' }, { status: 200 });
   } catch (error) {
     console.error(error);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });

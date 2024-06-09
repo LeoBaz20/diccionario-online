@@ -10,3 +10,4 @@ export * from "./searchbar";
 export * from "./Lists/ListCard";
 export * from "./Lists/ListUI";
 export * from "./Lists/NewList";
+export * from "./ListDetails/ListDetailsUI";
