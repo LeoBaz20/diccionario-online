@@ -1,9 +1,9 @@
 import { NextAuthOptions } from "next-auth";
-
 import CredentialsProvider from "next-auth/providers/credentials";
 import {compare} from 'bcrypt';
 
 import prisma from "./prisma";
+import { User } from "@/types";
 
 
 export const authConfig: NextAuthOptions = {
@@ -18,7 +18,7 @@ export const authConfig: NextAuthOptions = {
           },
           password: { label: "Password", type: "password" },
         },
-        async authorize(credentials) {
+        async authorize(credentials) : Promise<User | null> {
           if (!credentials || !credentials.email || !credentials.password)
             return null;
   
@@ -45,7 +45,7 @@ export const authConfig: NextAuthOptions = {
         const { password, ...userWithoutPassword } = dbUser;
 
         console.log(userWithoutPassword);
-        return userWithoutPassword;
+        return userWithoutPassword as User;
       },
     }),
     
@@ -68,6 +68,7 @@ export const authConfig: NextAuthOptions = {
     async session({ session, token }) {
       if (token) {
         session.user.id = token.id;
+
       }
       return session;
     },

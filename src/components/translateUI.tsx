@@ -1,27 +1,84 @@
 import { useState } from "react";
 import { ArrowsRightLeftIcon } from '@heroicons/react/24/solid';
+import { Menu, MenuHandler, MenuList, MenuItem, Button, Input } from "../components/MaterialTailwind";
 
 const languages = [
-  { code: 'EN', name: 'Inglés' },
-  { code: 'ES', name: 'Español' },
-  { code: 'FR', name: 'Francés' },
+  { "code": "BG", "name": "Búlgaro" },
+  { "code": "CS", "name": "Checo" },
+  { "code": "DA", "name": "Danés" },
+  { "code": "DE", "name": "Alemán" },
+  { "code": "EL", "name": "Griego" },
+  { "code": "EN-GB", "name": "Inglés (Británico)" },
+  { "code": "EN-US", "name": "Inglés (Americano)" },
+  { "code": "ES", "name": "Español" },
+  { "code": "ET", "name": "Estonio" },
+  { "code": "FI", "name": "Finlandés" },
+  { "code": "FR", "name": "Francés" },
+  { "code": "HU", "name": "Húngaro" },
+  { "code": "ID", "name": "Indonesio" },
+  { "code": "IT", "name": "Italiano" },
+  { "code": "JA", "name": "Japonés" },
+  { "code": "KO", "name": "Coreano" },
+  { "code": "LT", "name": "Lituano" },
+  { "code": "LV", "name": "Letón" },
+  { "code": "NB", "name": "Noruego (Bokmål)" },
+  { "code": "NL", "name": "Neerlandés" },
+  { "code": "PL", "name": "Polaco" },
+  { "code": "PT-BR", "name": "Portugués (Brasil)" },
+  { "code": "PT-PT", "name": "Portugués (Europa)" },
+  { "code": "RO", "name": "Rumano" },
+  { "code": "RU", "name": "Ruso" },
+  { "code": "SK", "name": "Eslovaco" },
+  { "code": "SL", "name": "Esloveno" },
+  { "code": "SV", "name": "Sueco" },
+  { "code": "TR", "name": "Turco" },
+  { "code": "UK", "name": "Ucraniano" },
+  { "code": "ZH", "name": "Chino (Simplificado)" }
 ];
 
 const targetLanguages = [
-  { code: 'EN-US', name: 'Inglés' },
-  { code: 'ES', name: 'Español' },
-  { code: 'FR', name: 'Francés' },
+  { "code": "BG", "name": "Búlgaro" },
+  { "code": "CS", "name": "Checo" },
+  { "code": "DA", "name": "Danés" },
+  { "code": "DE", "name": "Alemán" },
+  { "code": "EL", "name": "Griego" },
+  { "code": "EN-GB", "name": "Inglés (Británico)" },
+  { "code": "EN-US", "name": "Inglés (Americano)" },
+  { "code": "ES", "name": "Español" },
+  { "code": "ET", "name": "Estonio" },
+  { "code": "FI", "name": "Finlandés" },
+  { "code": "FR", "name": "Francés" },
+  { "code": "HU", "name": "Húngaro" },
+  { "code": "ID", "name": "Indonesio" },
+  { "code": "IT", "name": "Italiano" },
+  { "code": "JA", "name": "Japonés" },
+  { "code": "KO", "name": "Coreano" },
+  { "code": "LT", "name": "Lituano" },
+  { "code": "LV", "name": "Letón" },
+  { "code": "NB", "name": "Noruego (Bokmål)" },
+  { "code": "NL", "name": "Neerlandés" },
+  { "code": "PL", "name": "Polaco" },
+  { "code": "PT-BR", "name": "Portugués (Brasil)" },
+  { "code": "PT-PT", "name": "Portugués (Europa)" },
+  { "code": "RO", "name": "Rumano" },
+  { "code": "RU", "name": "Ruso" },
+  { "code": "SK", "name": "Eslovaco" },
+  { "code": "SL", "name": "Esloveno" },
+  { "code": "SV", "name": "Sueco" },
+  { "code": "TR", "name": "Turco" },
+  { "code": "UK", "name": "Ucraniano" },
+  { "code": "ZH", "name": "Chino (Simplificado)" }
 ];
 
 export function TranslateUI() {
-
   const [sourceLanguage, setSourceLanguage] = useState("detect");
   const [targetLanguage, setTargetLanguage] = useState("ES");
   const [inputText, setInputText] = useState("");
   const [translatedText, setTranslatedText] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
+
 
   const handleSwapLanguages = () => {
-    // Intercambiar los idiomas seleccionados
     const temp = sourceLanguage;
     setSourceLanguage(targetLanguage);
     setTargetLanguage(temp);
@@ -52,39 +109,54 @@ export function TranslateUI() {
     }
   };
 
+  const filteredLanguages = languages.filter(lang =>
+    lang.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   return (
     <div className="flex flex-col items-center min-h-screen bg-gray-100 p-8">
       <div className="w-full max-w-7xl p-5 bg-white border border-gray-200 rounded-lg shadow-md">
         <div className="flex flex-col md:flex-row md:space-x-4">
-          <select
-            className="w-full md:w-1/2 h-12 px-4 py-2 mb-4 border border-gray-300 rounded-lg"
-            value={sourceLanguage}
-            onChange={(e) => setSourceLanguage(e.target.value)}
-          >
-            <option value="detect">Detectar Idioma</option>
-            {languages.map(lang => (
-              <option key={lang.code} value={lang.code}>{lang.name}</option>
-            ))}
-            {/* Agregar más opciones de idiomas según sea necesario */}
-          </select>
+          <Menu>
+            <MenuHandler>
+              <Button className="w-full md:w-1/2 h-12 border-gray-300" variant="outlined">
+                {sourceLanguage === "detect" ? "Detectar Idioma" : languages.find(lang => lang.code === sourceLanguage).name}
+              </Button>
+            </MenuHandler>
+            <MenuList className="grid grid-cols-1 md:grid-cols-3 gap-3">
+              <MenuItem onClick={() => setSourceLanguage("detect")}>Detectar Idioma</MenuItem>
+              {languages.map(lang => (
+                <MenuItem key={lang.code} onClick={() => setSourceLanguage(lang.code)}>
+                  {lang.name}
+                </MenuItem>
+              ))}
+            </MenuList>
+          </Menu>
+
           <button
             className="flex items-center justify-center flex-shrink-0 w-12 h-12 p-2 mb-4 ml-auto text-black bg-white rounded-lg hover:bg-stone-50"
             onClick={handleSwapLanguages}
-            disabled={sourceLanguage === "detect"} // Deshabilitar si el idioma origen es "Detect Language"
+            disabled={sourceLanguage === "detect"}
           >
             <ArrowsRightLeftIcon className="w-6 h-6" />
           </button>
-          <select
-            className="w-full md:w-1/2 h-12 px-4 py-2 mb-4 border border-gray-300 rounded-lg"
-            value={targetLanguage}
-            onChange={(e) => setTargetLanguage(e.target.value)}
-          >
-            {targetLanguages.map(lang => (
-              <option key={lang.code} value={lang.code}>{lang.name}</option>
-            ))}
-            {/* Agregar más opciones de idiomas según sea necesario */}
-          </select>
+
+          <Menu>
+            <MenuHandler>
+              <Button className="w-full md:w-1/2 h-12 border-gray-300" variant="outlined">
+                {targetLanguages.find(lang => lang.code === targetLanguage).name}
+              </Button>
+            </MenuHandler>
+            <MenuList className="grid grid-cols-1 md:grid-cols-3 gap-3">
+              {targetLanguages.map(lang => (
+                <MenuItem key={lang.code} onClick={() => setTargetLanguage(lang.code)}>
+                  {lang.name}
+                </MenuItem>
+              ))}
+            </MenuList>
+          </Menu>
         </div>
+
         <div className="flex flex-col md:flex-row md:space-y-0 md:space-x-4">
           <textarea
             className="w-full md:w-1/2 h-80 p-4 mb-4 border border-gray-300 rounded-lg resize-none"
@@ -98,15 +170,15 @@ export function TranslateUI() {
             value={translatedText}
           ></textarea>
         </div>
-        <button className="w-full px-4 py-2 font-semibold text-white bg-blue-500 rounded-lg hover:bg-blue-600"
-        onClick={handleTranslate}
+        <button
+          className="w-full px-4 py-2 font-semibold text-white bg-blue-500 rounded-lg hover:bg-blue-600"
+          onClick={handleTranslate}
         >
           Traducir
         </button>
       </div>
     </div>
   );
-    
 }
 
 export default TranslateUI;

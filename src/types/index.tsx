@@ -11,3 +11,10 @@ export interface List {
     listId: number;
   }
   
+  export interface User {
+    id: number;
+    name: string;
+    lastname: string;
+    email: string;
+    createdAt: Date;
+  }

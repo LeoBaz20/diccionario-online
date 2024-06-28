@@ -2,6 +2,7 @@ import React from "react";
 import { useState } from 'react';
 import { toast } from 'react-toastify';
 import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
 import {
   Button,
   Card,
@@ -16,6 +17,7 @@ import {
 export function NewList({handleClose}) {
   const [name, setName] = useState('');
   const { data: session } = useSession();
+  const router = useRouter();
 
   const handleSubmit = async (e) => {
     e.preventDefault();

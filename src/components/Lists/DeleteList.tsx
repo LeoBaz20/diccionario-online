@@ -1,6 +1,5 @@
 import React from "react";
 import { toast } from 'react-toastify';
-import { useSession } from 'next-auth/react';
 import {
     Button,
     
@@ -14,13 +13,8 @@ import {
 } from "../MaterialTailwind";
 
 export function DeleteList({ listId, handleClose }) {
-    const { data: session } = useSession();
 
     const handleDelete = async () => {
-        if (!session) {
-            alert('You must be logged in to delete a list.');
-            return;
-        }
 
         try {
             const response = await fetch(`/api/lists/delete`, {
