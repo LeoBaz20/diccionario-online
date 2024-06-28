@@ -76,8 +76,6 @@ export function TranslateUI() {
   const [inputText, setInputText] = useState("");
   const [translatedText, setTranslatedText] = useState("");
 
-  const synth = window.speechSynthesis;
-
 
   const handleSwapLanguages = () => {
     const temp = sourceLanguage;
