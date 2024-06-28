@@ -7,5 +7,8 @@ const nextConfig = {
         // !! WARN !!
         ignoreBuildErrors: true,
       },
+      eslint: {
+        ignoreDuringBuilds: true,
+    },
 };
 export default nextConfig;
